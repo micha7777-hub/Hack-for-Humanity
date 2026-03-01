@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../backend/models/transaction_model.dart';
+import 'transaction_model.dart';
 import 'add_transaction_page.dart';
 
 class TransactionsPage extends StatefulWidget {
@@ -18,53 +18,38 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.transactions.isEmpty
-          ? const Center(child: Text('No transactions yet'))
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: widget.transactions.length,
-              itemBuilder: (context, index) {
-                final tx = widget.transactions[index];
-
-                return Card(
-                  child: ListTile(
-                    leading: Icon(
-                      tx.isIncome
-                          ? Icons.arrow_upward   // 🟢 income
-                          : Icons.arrow_downward, // 🔴 expense
-                      color:
-                          tx.isIncome ? Colors.green : Colors.red,
-                    ),
-                    title: Text(tx.title),
-                    trailing: Text(
-                      '\$${tx.amount.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color:
-                            tx.isIncome ? Colors.green : Colors.red,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: ListView.builder(
+          itemCount: widget.transactions.length,
+          itemBuilder: (context, index) {
+            final tx = widget.transactions[index];
+            return ListTile(
+              leading: Icon(
+                tx.isIncome ? Icons.arrow_downward : Icons.arrow_upward,
+                color: tx.isIncome ? Colors.green : Colors.red,
+              ),
+              title: Text(tx.title),
+              subtitle: Text(tx.category),
+              trailing: Text('\$${tx.amount.toStringAsFixed(2)}'),
+            );
+          },
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
         onPressed: () async {
-          final result = await Navigator.push(
+          final newTx = await Navigator.push<TransactionModel>(
             context,
-            MaterialPageRoute(
-              builder: (_) => AddTransactionPage(),
-            ),
+            MaterialPageRoute(builder: (_) => const AddTransactionPage()),
           );
 
-          if (result != null) {
+          if (newTx != null) {
             setState(() {
-              widget.transactions.add(result);
+              widget.transactions.insert(0, newTx);
             });
           }
         },
+        child: const Icon(Icons.add),
       ),
     );
   }

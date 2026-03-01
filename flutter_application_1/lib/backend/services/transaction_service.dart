@@ -1,4 +1,4 @@
-import '../models/transaction_model.dart';
+import '../../frontend/transactions/transaction_model.dart';
 
 class TransactionService {
   final List<TransactionModel> _transactions = [];
