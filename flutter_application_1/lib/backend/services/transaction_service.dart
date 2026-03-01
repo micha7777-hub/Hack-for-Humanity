@@ -1,19 +1,15 @@
-import '../../frontend/transactions/transaction_model.dart';
+import 'package:flutter_application_1/frontend/transactions/transaction_model.dart';
 
 class TransactionService {
   final List<TransactionModel> _transactions = [];
 
   List<TransactionModel> get transactions => _transactions;
 
-  void add(TransactionModel tx) {
-    _transactions.add(tx);
+  void addTransaction(TransactionModel tx) {
+    _transactions.insert(0, tx);
   }
 
-  double get income =>
-      _transactions.where((t) => t.isIncome).fold(0, (a, b) => a + b.amount);
-
-  double get expenses =>
-      _transactions.where((t) => !t.isIncome).fold(0, (a, b) => a + b.amount);
-
-  double get balance => income - expenses;
+  void removeTransaction(TransactionModel tx) {
+    _transactions.remove(tx);
+  }
 }
