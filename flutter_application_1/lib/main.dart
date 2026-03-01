@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'app.dart';
+import 'state/game_state.dart';
 
 void main() {
   runApp(
-    MaterialApp(
+    ChangeNotifierProvider(
+      create: (_) => GameState(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
 
       // 🌱 WHITE + GREEN THEME
       theme: ThemeData(
         useMaterial3: true,
+
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+  backgroundColor: Color(0xFFF6FBF7),
+  selectedItemColor: Color(0xFF2E7D32),
+  unselectedItemColor: Color(0xFF7A8A7F),
+  showSelectedLabels: true,
+  showUnselectedLabels: true,
+  type: BottomNavigationBarType.fixed,
+),
 
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF2E7D32), // deep green
@@ -58,6 +82,6 @@ void main() {
       ),
 
       home: const App(),
-    ),
-  );
+    );
+  }
 }
