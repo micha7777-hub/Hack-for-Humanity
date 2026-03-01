@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../backend/models/transaction_model.dart';
 
 class AddTransactionPage extends StatefulWidget {
   const AddTransactionPage({super.key});
@@ -8,10 +9,9 @@ class AddTransactionPage extends StatefulWidget {
 }
 
 class _AddTransactionPageState extends State<AddTransactionPage> {
-  final _titleCtrl = TextEditingController();
-  final _amountCtrl = TextEditingController();
-  final _categoryCtrl = TextEditingController();
-  bool _isIncome = false;
+  final titleCtrl = TextEditingController();
+  final amountCtrl = TextEditingController();
+  bool isIncome = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,42 +22,29 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
         child: Column(
           children: [
             TextField(
-              controller: _titleCtrl,
+              controller: titleCtrl,
               decoration: const InputDecoration(labelText: 'Title'),
             ),
-            const SizedBox(height: 16),
-
             TextField(
-              controller: _amountCtrl,
-              decoration: const InputDecoration(labelText: 'Amount'),
+              controller: amountCtrl,
               keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Amount'),
             ),
-            const SizedBox(height: 16),
-
-            TextField(
-              controller: _categoryCtrl,
-              decoration: const InputDecoration(labelText: 'Category'),
-            ),
-            const SizedBox(height: 16),
-
             SwitchListTile(
               title: const Text('Income'),
-              value: _isIncome,
-              onChanged: (v) => setState(() => _isIncome = v),
+              value: isIncome,
+              onChanged: (v) => setState(() => isIncome = v),
             ),
-
-            const SizedBox(height: 24),
-
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(
                   context,
-                  {
-                    'title': _titleCtrl.text,
-                    'amount': double.parse(_amountCtrl.text),
-                    'category': _categoryCtrl.text,
-                    'isIncome': _isIncome,
-                  },
+                  TransactionModel(
+                    id: DateTime.now().toString(),
+                    title: titleCtrl.text,
+                    amount: double.parse(amountCtrl.text),
+                    isIncome: isIncome,
+                  ),
                 );
               },
               child: const Text('Save'),
